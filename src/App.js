@@ -11,7 +11,7 @@ function Analyzer({ sound }) {
   const analyser = useRef();
   useEffect(
     () => void (analyser.current = new THREE.AudioAnalyser(sound.current, 32)),
-    []
+    [sound]
   );
   useFrame(() => {
     if (analyser.current) {
@@ -43,7 +43,7 @@ function PlaySound({ url }) {
 export default function App() {
   return (
     <Canvas concurrent camera={{ position: [0, 0, 5], far: 50 }}>
-      <PlaySound url="sounds/2.mp3" />
+      <PlaySound url="sounds/cat2.wav" />
       <OrbitControls />
     </Canvas>
   );

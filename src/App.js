@@ -45,7 +45,7 @@ function PlaySound({ url }) {
 }
 
 function ToneSampler() {
-  const [isLoaded, setLoaded] = useState(false);
+  // const [isLoaded, setLoaded] = useState(false);
   const sampler = useRef(null);
 
   useEffect(() => {
@@ -53,20 +53,17 @@ function ToneSampler() {
       { A1 },
       {
         onload: () => {
-          setLoaded(true);
+          // setLoaded(true);
+          sampler.current.triggerAttack("A1");
         }
       }
     ).toDestination();
   }, []);
 
-  const handleClick = () => sampler.current.triggerAttack("A1");
+  // const handleClick = () => sampler.current.triggerAttack("A1");
 
   return (
-    <div>
-      <button disabled={!isLoaded} onClick={handleClick}>
-        start
-      </button>
-    </div>
+    <React.Fragment />
   );
 }
 
@@ -75,8 +72,3 @@ export default function App() {
     <ToneSampler />
   );
 }
-
-{/* <Canvas concurrent camera={{ position: [0, 0, 5], far: 50 }}>
-  <PlaySound url="sounds/cat2.wav" />
-  <OrbitControls />
-</Canvas> */}

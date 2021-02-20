@@ -1,7 +1,11 @@
 import * as THREE from "three";
-import React, { Suspense, useRef, useEffect } from "react";
+import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "react-three-fiber";
 import { Sphere, PositionalAudio, OrbitControls } from "@react-three/drei";
+import { Sampler } from "tone";
+// import A1 from "../public/sounds/001-sibutomo.mp3";
+// import A1 from "./001-sibutomo.mp3";
+import A1 from "./cat2.wav";
 
 function Analyzer({ sound }) {
   // <Analyzer /> will not run before everything else in the suspense block is resolved.
@@ -40,11 +44,39 @@ function PlaySound({ url }) {
   );
 }
 
-export default function App() {
+function ToneSampler() {
+  const [isLoaded, setLoaded] = useState(false);
+  const sampler = useRef(null);
+
+  useEffect(() => {
+    sampler.current = new Sampler(
+      { A1 },
+      {
+        onload: () => {
+          setLoaded(true);
+        }
+      }
+    ).toDestination();
+  }, []);
+
+  const handleClick = () => sampler.current.triggerAttack("A1");
+
   return (
-    <Canvas concurrent camera={{ position: [0, 0, 5], far: 50 }}>
-      <PlaySound url="sounds/cat2.wav" />
-      <OrbitControls />
-    </Canvas>
+    <div>
+      <button disabled={!isLoaded} onClick={handleClick}>
+        start
+      </button>
+    </div>
   );
 }
+
+export default function App() {
+  return (
+    <ToneSampler />
+  );
+}
+
+{/* <Canvas concurrent camera={{ position: [0, 0, 5], far: 50 }}>
+  <PlaySound url="sounds/cat2.wav" />
+  <OrbitControls />
+</Canvas> */}

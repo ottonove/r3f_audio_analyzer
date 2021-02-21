@@ -69,11 +69,14 @@ function ToneSampler() {
     // 楽譜データ
     const melody_score = [
       //note(音名) nullは休符
-      [{ note: "F5" }, { note: "F5" }],
-      [{ note: "F5" }, { note: "F5" }],
-      [null, { note: "D#5" }],
-      [null, { note: "G5" }],
-      [null, { note: "F5" }]
+      [{ note: "C5" }, { note: "C5" }],
+      [{ note: "C5" }, { note: "C5" }],
+      [null, null],
+      [{ note: "G#4" }, null],
+      [null, { note: "A#4" }],
+      [null, null],
+      [{ note: "C5" }, null],
+      [{ note: "A#4" }, { note: "C5" }],
     ];
 
     //シーケンサーインスタンス
@@ -82,36 +85,36 @@ function ToneSampler() {
         melody_synth.triggerAttackRelease(note);
       },
       melody_score,
-      "4n"
+      "3n"
     ).start();
 
     //演奏のリピートをfalseに
     melody_sequence.loop = false;
 
     //シンセサイザーインスタンス
-    const bass_synth = new Tone.Synth().toDestination();
+    // const bass_synth = new Tone.Synth().toDestination();
 
     // 楽譜データ
-    const bass_score = [
-      //note(音名) nullは休符
-      [{ note: "C5" }, { note: "B4" }],
-      [{ note: "A#4" }, { note: "A4" }],
-      [null, { note: "G4" }],
-      [null, { note: "A#4" }],
-      [null, { note: "A4" }]
-    ];
+    // const bass_score = [
+    //   //note(音名) nullは休符
+    //   [{ note: "C5" }, { note: "B4" }],
+    //   [{ note: "A#4" }, { note: "A4" }],
+    //   [null, { note: "G4" }],
+    //   [null, { note: "A#4" }],
+    //   [null, { note: "A4" }]
+    // ];
 
     //シーケンサーインスタンス
-    const bass_sequence = new Tone.Sequence(
-      (time, { note }) => {
-        bass_synth.triggerAttackRelease(note);
-      },
-      bass_score,
-      "4n"
-    ).start();
+    // const bass_sequence = new Tone.Sequence(
+    //   (time, { note }) => {
+    //     bass_synth.triggerAttackRelease(note);
+    //   },
+    //   bass_score,
+    //   "4n"
+    // ).start();
 
     //演奏のリピートをfalseに
-    bass_sequence.loop = false;
+    // bass_sequence.loop = false;
   },[]);
 
   // const handleClick = () => sampler.current.triggerAttack("A1");

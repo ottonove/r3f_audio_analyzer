@@ -64,7 +64,7 @@ function ToneSampler() {
     Tone.Transport.bpm.value = 240;
 
     //シンセサイザーインスタンス
-    const melody_synth = new Tone.Synth().toMaster();
+    const melody_synth = new Tone.Synth().toDestination();
 
     // 楽譜データ
     const melody_score = [
@@ -89,7 +89,7 @@ function ToneSampler() {
     melody_sequence.loop = false;
 
     //シンセサイザーインスタンス
-    const bass_synth = new Tone.Synth().toMaster();
+    const bass_synth = new Tone.Synth().toDestination();
 
     // 楽譜データ
     const bass_score = [
@@ -113,13 +113,26 @@ function ToneSampler() {
     //演奏のリピートをfalseに
     bass_sequence.loop = false;
 
-    Tone.Transport.start();
+    Tone.context.resume().then((data) => {
+      console.log("data: ",data);
+      console.log(Tone.context.state);
+      Tone.Transport.start();
+    });
   }, []);
 
   // const handleClick = () => sampler.current.triggerAttack("A1");
+  const handleClick = () => {
+    Tone.context.resume().then((data) => {
+      console.log("data on click:", data);
+      console.log(Tone.context.state);
+      Tone.Transport.start();
+    });
+  }
 
   return (
-    <React.Fragment />
+    <div>
+      <button onClick={handleClick}>start</button>
+    </div>
   );
 }
 

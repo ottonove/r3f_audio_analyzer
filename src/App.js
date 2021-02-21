@@ -76,7 +76,7 @@ function ToneSampler() {
       [null, { note: "A#4" }],
       [null, null],
       [{ note: "C5" }, null],
-      [{ note: "A#4" }, { note: "C5" }],
+      [{ note: "A#4" }, { note: "C5" }]
     ];
 
     //シーケンサーインスタンス
@@ -118,17 +118,25 @@ function ToneSampler() {
   },[]);
 
   // const handleClick = () => sampler.current.triggerAttack("A1");
-  const handleClick = () => {
-    Tone.context.resume()
+  const musicStart = () => {
+    if(Tone.context.state === 'suspended') {
+      Tone.context.resume()
       .then(() => {
-        console.log(Tone.context.state);
         Tone.Transport.start();
       });
+    } else {
+      Tone.Transport.start();
+    }
+  }
+
+  const musicStop = () => {
+    Tone.Transport.stop();
   }
 
   return (
     <div>
-      <button onClick={handleClick}>start</button>
+      <button onClick={musicStart}>start</button>
+      <button onClick={musicStop}>stop</button>
     </div>
   );
 }

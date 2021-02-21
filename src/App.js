@@ -112,21 +112,15 @@ function ToneSampler() {
 
     //演奏のリピートをfalseに
     bass_sequence.loop = false;
-
-    Tone.context.resume().then((data) => {
-      console.log("data: ",data);
-      console.log(Tone.context.state);
-      Tone.Transport.start();
-    });
-  }, []);
+  },[]);
 
   // const handleClick = () => sampler.current.triggerAttack("A1");
   const handleClick = () => {
-    Tone.context.resume().then((data) => {
-      console.log("data on click:", data);
-      console.log(Tone.context.state);
-      Tone.Transport.start();
-    });
+    Tone.context.resume()
+      .then(() => {
+        console.log(Tone.context.state);
+        Tone.Transport.start();
+      });
   }
 
   return (

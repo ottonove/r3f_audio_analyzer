@@ -6,6 +6,8 @@ import { Sampler } from "tone";
 // import A1 from "../public/sounds/001-sibutomo.mp3";
 // import A1 from "./001-sibutomo.mp3";
 import A1 from "./cat2.wav";
+import * as Tone from 'tone'
+
 
 function Analyzer({ sound }) {
   // <Analyzer /> will not run before everything else in the suspense block is resolved.
@@ -46,10 +48,10 @@ function PlaySound({ url }) {
 
 function ToneSampler() {
   // const [isLoaded, setLoaded] = useState(false);
-  const sampler = useRef(null);
+  // const sampler = useRef(null);
 
   useEffect(() => {
-    sampler.current = new Sampler(
+    /* sampler.current = new Sampler(
       { A1 },
       {
         onload: () => {
@@ -57,7 +59,61 @@ function ToneSampler() {
           sampler.current.triggerAttack("A1");
         }
       }
-    ).toDestination();
+    ).toDestination(); */
+    //BPM
+    Tone.Transport.bpm.value = 240;
+
+    //シンセサイザーインスタンス
+    const melody_synth = new Tone.Synth().toMaster();
+
+    // 楽譜データ
+    const melody_score = [
+      //note(音名) nullは休符
+      [{ note: "F5" }, { note: "F5" }],
+      [{ note: "F5" }, { note: "F5" }],
+      [null, { note: "D#5" }],
+      [null, { note: "G5" }],
+      [null, { note: "F5" }]
+    ];
+
+    //シーケンサーインスタンス
+    const melody_sequence = new Tone.Sequence(
+      (time, { note }) => {
+        melody_synth.triggerAttackRelease(note);
+      },
+      melody_score,
+      "4n"
+    ).start();
+
+    //演奏のリピートをfalseに
+    melody_sequence.loop = false;
+
+    //シンセサイザーインスタンス
+    const bass_synth = new Tone.Synth().toMaster();
+
+    // 楽譜データ
+    const bass_score = [
+      //note(音名) nullは休符
+      [{ note: "C5" }, { note: "B4" }],
+      [{ note: "A#4" }, { note: "A4" }],
+      [null, { note: "G4" }],
+      [null, { note: "A#4" }],
+      [null, { note: "A4" }]
+    ];
+
+    //シーケンサーインスタンス
+    const bass_sequence = new Tone.Sequence(
+      (time, { note }) => {
+        bass_synth.triggerAttackRelease(note);
+      },
+      bass_score,
+      "4n"
+    ).start();
+
+    //演奏のリピートをfalseに
+    bass_sequence.loop = false;
+
+    Tone.Transport.start();
   }, []);
 
   // const handleClick = () => sampler.current.triggerAttack("A1");

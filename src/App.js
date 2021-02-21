@@ -9,23 +9,23 @@ import A1 from "./cat2.wav";
 import * as Tone from 'tone'
 
 
-function Analyzer({ sound }) {
+function Analyzer(/* { sound } */) {
   // <Analyzer /> will not run before everything else in the suspense block is resolved.
   // That means <PositionalAudio/>, which executes async, is ready by the time we're here.
   // The next frame (useEffect) is guaranteed(!) to access positional-audios ref.
   const mesh = useRef();
-  const analyser = useRef();
+  /* const analyser = useRef();
   useEffect(
     () => void (analyser.current = new THREE.AudioAnalyser(sound.current, 32)),
     [sound]
-  );
+  ); */
   useFrame(() => {
-    if (analyser.current) {
-      const data = analyser.current.getAverageFrequency();
+    // if (analyser.current) {
+      const data = 128;//analyser.current.getAverageFrequency();
       mesh.current.material.color.setRGB(data / 100, 0, 0);
       mesh.current.scale.x = mesh.current.scale.y = mesh.current.scale.z =
         (data / 100) * 2;
-    }
+    //}
   });
   return (
     <Sphere ref={mesh} args={[1, 64, 64]}>
@@ -41,7 +41,7 @@ function PlaySound({ url }) {
   return (
     <Suspense fallback={null}>
       <PositionalAudio url={url} ref={sound} />
-      <Analyzer sound={sound} />
+      <Analyzer />
     </Suspense>
   );
 }
@@ -61,7 +61,7 @@ function ToneSampler() {
       }
     ).toDestination(); */
     //BPM
-    Tone.Transport.bpm.value = 240;
+    Tone.Transport.bpm.value = 180;
 
     //シンセサイザーインスタンス
     const melody_synth = new Tone.Synth().toDestination();
@@ -85,7 +85,7 @@ function ToneSampler() {
         melody_synth.triggerAttackRelease(note);
       },
       melody_score,
-      "3n"
+      "4n"
     ).start();
 
     //演奏のリピートをfalseに
@@ -143,6 +143,12 @@ function ToneSampler() {
 
 export default function App() {
   return (
-    <ToneSampler />
+    <React.Fragment>
+      <ToneSampler />
+      <Canvas concurrent camera={{ position: [0, 0, 5], far: 50 }}>
+        <Analyzer />
+        <OrbitControls />
+      </Canvas>
+    </React.Fragment>
   );
 }

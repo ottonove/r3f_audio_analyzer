@@ -28,12 +28,13 @@ export default function Arpeggiator() {
     
       const synth = new Tone.Synth();
       const gain = new Tone.Gain(0.7);
-      synth.oscillator.type = 'sine';
+      synth.oscillator.type = 'triangle';
       gain.toDestination();
       synth.connect(gain);
     
       Array.from($inputs).forEach($input => {
         $input.addEventListener('change', () => {
+          console.log('$input.value:', $input.value);
           if ($input.checked) handleChord($input.value);
         })
       });
@@ -47,6 +48,7 @@ export default function Arpeggiator() {
       Tone.Transport.bpm.value = 90;
     
       function onRepeat(time) {
+        console.log('time:',time);//この関数の実行開始からの経過時間を引数に持つ
         let chord = chords[chordIdx],
             note = chord[step % chord.length];
         synth.triggerAttackRelease(note, '16n', time);

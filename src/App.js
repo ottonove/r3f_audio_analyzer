@@ -1,8 +1,9 @@
 import React from "react";
-import StepSequencer from './StepSequencer';
+// import StepSequencer from './StepSequencer';
+import Arpeggiator from './Arpeggiator';
 
 export default function App() {
   return (
-    <StepSequencer />
+    <Arpeggiator />
   );
 }

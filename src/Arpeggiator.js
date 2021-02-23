@@ -3,11 +3,28 @@ import * as Tone from 'tone'
 
 export default function Arpeggiator() {
 
-  const [chord, setChord] = useState(0);
+  // DOWN THE LINE THIS WILL MAKE THINGS EASIER
+  function formatChords(chordString) {
+    let chord = chordString.split(' ');
+    let arr = [];
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < chord.length; j++) {
+        let noteOct = chord[j].split(''),
+            note = noteOct[0];
+        let oct = (noteOct[1] === '0') ? i + 4 : i + 5;
+        note += oct;
+        arr.push(note);
+      }
+    }
+    return arr;
+  }
 
+  const [chordNum, setChordNum] = useState(0);
+  const [loopid, setLoopid] = useState(0);
+  
   useEffect(() => {
 
-    console.log('useEffect fire!');
+    console.log('chord:', chordNum);
 
     const $inputs = document.querySelectorAll('input'),
     chords = [
@@ -33,39 +50,32 @@ export default function Arpeggiator() {
   
     function handleChord(valueString) {
       chordIdx = parseInt(valueString) - 1;
-      setChord(chordIdx);
+      setChordNum(chordIdx);
     }
-  
-    Tone.Transport.scheduleRepeat(onRepeat, '16n');
-    Tone.Transport.start();
-    Tone.Transport.bpm.value = 90;
   
     function onRepeat(time) {
       //この関数の実行開始からの経過時間を引数に持つ
-      let chord = chords[chordIdx],
+      let chord = chords[chordNum],
           note = chord[step % chord.length];
       synth.triggerAttackRelease(note, '16n', time);
       step++;
     }
-  
-    // DOWN THE LINE THIS WILL MAKE THINGS EASIER
-    function formatChords(chordString) {
-      let chord = chordString.split(' ');
-      let arr = [];
-      for (let i = 0; i < 2; i++) {
-        for (let j = 0; j < chord.length; j++) {
-          let noteOct = chord[j].split(''),
-              note = noteOct[0];
-          let oct = (noteOct[1] === '0') ? i + 4 : i + 5;
-          note += oct;
-          arr.push(note);
-        }
-      }
-      return arr;
-    }
 
-    console.log('Tone state:', Tone.context.state);
-  },[chord]);
+    // Tone.Transport.cancel();
+    if(Tone.context.state === 'running') {
+      console.log("running");
+      Tone.Transport.clear(loopid);
+    }
+    
+    console.log('chordIdx:',chordIdx);
+    const id = Tone.Transport.scheduleRepeat(onRepeat, '16n');
+    setLoopid(id);
+    Tone.Transport.start();
+    Tone.Transport.bpm.value = 90;
+
+  },
+  [chordNum]
+  );
 
   return (
     <React.Fragment>

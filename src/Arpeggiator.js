@@ -6,11 +6,8 @@ export default function Arpeggiator() {
 
   useEffect(() => {
     document.documentElement.addEventListener('mousedown', () => {
-      if (Tone.context.state !== 'running') Tone.context.resume();
-    });
-
-    document.documentElement.addEventListener('mousedown', () => {
       if (started) return;
+
       setStarted(true);
     
       const $inputs = document.querySelectorAll('input'),
@@ -18,7 +15,14 @@ export default function Arpeggiator() {
               'A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1',
               'D0 F0 A0', 'E0 G0 B0'
             ].map(formatChords);
-      console.log(chords);
+      console.log('コーズ:', chords);
+      /*
+      0: (6) ["A4", "C5", "E5", "A5", "C6", "E6"]
+      1: (6) ["F4", "A4", "C5", "F5", "A5", "C6"]
+      2: (6) ["G4", "B4", "D5", "G5", "B5", "D6"]
+      3: (6) ["D4", "F4", "A4", "D5", "F5", "A5"]
+      4: (6) ["E4", "G4", "B4", "E5", "G5", "B5"]
+      */
       var chordIdx = 0,
           step = 0;
     
@@ -64,12 +68,16 @@ export default function Arpeggiator() {
         }
         return arr;
       }
-    });
+    },{once:true});
   });
 
   return (
     <React.Fragment>
-      
+      <input id="chord-1" value="1" type="radio" name="chord" />
+      <input id="chord-2" value="2" type="radio" name="chord" />
+      <input id="chord-3" value="3" type="radio" name="chord" />
+      <input id="chord-4" value="4" type="radio" name="chord" />
+      <input id="chord-5" value="5" type="radio" name="chord" />
     </React.Fragment>
   );
 }

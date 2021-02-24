@@ -4,7 +4,7 @@ import * as Tone from 'tone'
 export default function Arpeggiator() {
 
   // DOWN THE LINE THIS WILL MAKE THINGS EASIER
-  function formatChords(chordString) {
+  const formatChords = (chordString) => {
     let chord = chordString.split(' ');
     let arr = [];
     for (let i = 0; i < 2; i++) {
@@ -21,37 +21,35 @@ export default function Arpeggiator() {
 
   const [chordNum, setChordNum] = useState(0);
   const [loopid, setLoopid] = useState(0);
+  let chordIdx = 0
+  let step = 0;
   
+  const handleChord = (event) => {
+    chordIdx = parseInt(event.target.value) - 1;
+    setChordNum(chordIdx);
+  }
+
   useEffect(() => {
 
-    console.log('chord:', chordNum);
-
-    const $inputs = document.querySelectorAll('input'),
-    chords = [
-      'A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1',
-      'D0 F0 A0', 'E0 G0 B0'
-    ].map(formatChords);
+    //const $inputs = document.querySelectorAll('input'),
+    const chords =
+      ['A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1', 'D0 F0 A0', 'E0 G0 B0']
+      .map(formatChords);
       
-    let chordIdx = 0,
-        step = 0;
-  
     const synth = new Tone.Synth();
     const gain = new Tone.Gain(0.7);
     synth.oscillator.type = 'triangle';
     gain.toDestination();
     synth.connect(gain);
   
-    Array.from($inputs).forEach($input => {
+    /* Array.from($inputs).forEach($input => {
       $input.addEventListener('change', () => {
         // console.log('$input.value:', $input.value);
         if ($input.checked) handleChord($input.value);
       })
-    });
+    }); */
   
-    function handleChord(valueString) {
-      chordIdx = parseInt(valueString) - 1;
-      setChordNum(chordIdx);
-    }
+    
   
     function onRepeat(time) {
       //この関数の実行開始からの経過時間を引数に持つ
@@ -73,17 +71,24 @@ export default function Arpeggiator() {
     Tone.Transport.start();
     Tone.Transport.bpm.value = 90;
 
-  },
-  [chordNum]
-  );
+  }, [chordNum]);
 
   return (
-    <React.Fragment>
-      <input id="chord-1" value="1" type="radio" name="chord" />
-      <input id="chord-2" value="2" type="radio" name="chord" />
-      <input id="chord-3" value="3" type="radio" name="chord" />
-      <input id="chord-4" value="4" type="radio" name="chord" />
-      <input id="chord-5" value="5" type="radio" name="chord" />
-    </React.Fragment>
+    <>
+      <input
+        value="1"
+        type="radio"
+        name="chord"
+        // eslint-disable-next-line no-undef
+        onChange={handleChord}
+      />
+      <input
+        value="2"
+        type="radio"
+        name="chord"
+        // eslint-disable-next-line no-undef
+        onChange={handleChord}
+      />
+    </>
   );
 }

@@ -3,7 +3,12 @@ import * as Tone from 'tone'
 
 export default function Arpeggiator() {
 
-  // DOWN THE LINE THIS WILL MAKE THINGS EASIER
+  const synth = new Tone.Synth();
+  const gain = new Tone.Gain(0.7);
+  synth.oscillator.type = 'triangle';
+  gain.toDestination();
+  synth.connect(gain);
+
   const formatChords = (chordString) => {
     let chord = chordString.split(' ');
     let arr = [];
@@ -19,45 +24,33 @@ export default function Arpeggiator() {
     return arr;
   }
 
-  const [chordNum, setChordNum] = useState(0);
-  const [loopid, setLoopid] = useState(0);
-  let chordIdx = 0
-  let step = 0;
-  
+  const chords =
+      ['A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1', 'D0 F0 A0', 'E0 G0 B0']
+      .map(formatChords);
+
   const handleChord = (event) => {
     chordIdx = parseInt(event.target.value) - 1;
     setChordNum(chordIdx);
   }
 
+  const onRepeat = (time) =>{
+    //この関数の実行開始からの経過時間を引数に持つ
+    let chord = chords[chordNum],
+        note = chord[step % chord.length];
+    synth.triggerAttackRelease(note, '16n', time);
+    step++;
+  }
+
+  const [chordNum, setChordNum] = useState(0);
+  const [loopid, setLoopid] = useState(0);
+
+  let chordIdx = 0
+  let step = 0;
+
   useEffect(() => {
 
-    //const $inputs = document.querySelectorAll('input'),
-    const chords =
-      ['A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1', 'D0 F0 A0', 'E0 G0 B0']
-      .map(formatChords);
-      
-    const synth = new Tone.Synth();
-    const gain = new Tone.Gain(0.7);
-    synth.oscillator.type = 'triangle';
-    gain.toDestination();
-    synth.connect(gain);
-  
-    /* Array.from($inputs).forEach($input => {
-      $input.addEventListener('change', () => {
-        // console.log('$input.value:', $input.value);
-        if ($input.checked) handleChord($input.value);
-      })
-    }); */
-  
+    //const $inputs = document.querySelectorAll('input'),      
     
-  
-    function onRepeat(time) {
-      //この関数の実行開始からの経過時間を引数に持つ
-      let chord = chords[chordNum],
-          note = chord[step % chord.length];
-      synth.triggerAttackRelease(note, '16n', time);
-      step++;
-    }
 
     // Tone.Transport.cancel();
     if(Tone.context.state === 'running') {

@@ -43,14 +43,16 @@ export default function Arpeggiator() {
   }
 
   const [chordNum, setChordNum] = useState(0);
-  const [loopid, setLoopid] = useState(0);
+  // const [loopid, setLoopid] = useState(0);
 
   let chordIdx = 0
   let step = 0;
 
   useEffect(() => {
-    Tone.Transport.clear(loopid);    
-    setLoopid(Tone.Transport.scheduleRepeat(onRepeat, '16n'));
+    //Tone.Transport.clear(loopid);
+    Tone.Transport.cancel();
+    //setLoopid(Tone.Transport.scheduleRepeat(onRepeat, '16n'));
+    Tone.Transport.scheduleRepeat(onRepeat, '16n');
     Tone.Transport.start();
   }, [chordNum]);
 
@@ -64,6 +66,24 @@ export default function Arpeggiator() {
       />
       <input
         value="2"
+        type="radio"
+        name="chord"
+        onChange={handleChord}
+      />
+      <input
+        value="3"
+        type="radio"
+        name="chord"
+        onChange={handleChord}
+      />
+      <input
+        value="4"
+        type="radio"
+        name="chord"
+        onChange={handleChord}
+      />
+      <input
+        value="5"
         type="radio"
         name="chord"
         onChange={handleChord}

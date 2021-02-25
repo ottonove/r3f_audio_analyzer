@@ -34,27 +34,23 @@ export default function Arpeggiator() {
     setChordNum(chordIdx);
   }
 
-  const onRepeat = (time) =>{
-    //この関数の実行開始からの経過時間を引数に持つ
-    let chord = chords[chordNum],
-        note = chord[step % chord.length];
-    synth.triggerAttackRelease(note, '16n', time);
-    step++;
-  }
-
   const [chordNum, setChordNum] = useState(0);
-  // const [loopid, setLoopid] = useState(0);
 
   let chordIdx = 0
   let step = 0;
 
   useEffect(() => {
-    //Tone.Transport.clear(loopid);
+    const onRepeat = (time) =>{
+      //この関数の実行開始からの経過時間を引数に持つ
+      let chord = chords[chordNum],
+          note = chord[step % chord.length];
+      synth.triggerAttackRelease(note, '16n', time);
+      step++;
+    }
     Tone.Transport.cancel();
-    //setLoopid(Tone.Transport.scheduleRepeat(onRepeat, '16n'));
     Tone.Transport.scheduleRepeat(onRepeat, '16n');
     Tone.Transport.start();
-  }, [chordNum]);
+  }, [chordNum, chords, step, synth]);
 
   return (
     <>

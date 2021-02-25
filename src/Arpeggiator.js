@@ -8,6 +8,7 @@ export default function Arpeggiator() {
   synth.oscillator.type = 'triangle';
   gain.toDestination();
   synth.connect(gain);
+  Tone.Transport.bpm.value = 90;
 
   const formatChords = (chordString) => {
     let chord = chordString.split(' ');
@@ -48,22 +49,9 @@ export default function Arpeggiator() {
   let step = 0;
 
   useEffect(() => {
-
-    //const $inputs = document.querySelectorAll('input'),      
-    
-
-    // Tone.Transport.cancel();
-    if(Tone.context.state === 'running') {
-      console.log("running");
-      Tone.Transport.clear(loopid);
-    }
-    
-    console.log('chordIdx:',chordIdx);
-    const id = Tone.Transport.scheduleRepeat(onRepeat, '16n');
-    setLoopid(id);
+    Tone.Transport.clear(loopid);    
+    setLoopid(Tone.Transport.scheduleRepeat(onRepeat, '16n'));
     Tone.Transport.start();
-    Tone.Transport.bpm.value = 90;
-
   }, [chordNum]);
 
   return (
@@ -72,14 +60,12 @@ export default function Arpeggiator() {
         value="1"
         type="radio"
         name="chord"
-        // eslint-disable-next-line no-undef
         onChange={handleChord}
       />
       <input
         value="2"
         type="radio"
         name="chord"
-        // eslint-disable-next-line no-undef
         onChange={handleChord}
       />
     </>

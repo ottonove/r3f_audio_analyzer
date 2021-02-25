@@ -29,7 +29,8 @@ export default function Arpeggiator() {
     'A0 C1 E1',
     'F0 A0 C1',
     'G0 B0 D1',
-    'D0 F0 A0','E0 G0 B0'
+    'D0 F0 A0',
+    'E0 G0 B0'
   ].map(formatChords);
 
   const handleChord = (event) => {
@@ -53,7 +54,8 @@ export default function Arpeggiator() {
     Tone.Transport.cancel();
     Tone.Transport.scheduleRepeat(onRepeat, '16n');
     Tone.Transport.start();
-  }, [chordNum, chords, step, synth]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chordNum]);
 
   return (
     <>

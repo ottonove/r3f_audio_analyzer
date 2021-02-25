@@ -25,9 +25,12 @@ export default function Arpeggiator() {
     return arr;
   }
 
-  const chords =
-      ['A0 C1 E1', 'F0 A0 C1', 'G0 B0 D1', 'D0 F0 A0', 'E0 G0 B0']
-      .map(formatChords);
+  const chords = [
+    'A0 C1 E1',
+    'F0 A0 C1',
+    'G0 B0 D1',
+    'D0 F0 A0','E0 G0 B0'
+  ].map(formatChords);
 
   const handleChord = (event) => {
     chordIdx = parseInt(event.target.value) - 1;
@@ -54,36 +57,15 @@ export default function Arpeggiator() {
 
   return (
     <>
-      <input
-        value="1"
-        type="radio"
-        name="chord"
-        onChange={handleChord}
-      />
-      <input
-        value="2"
-        type="radio"
-        name="chord"
-        onChange={handleChord}
-      />
-      <input
-        value="3"
-        type="radio"
-        name="chord"
-        onChange={handleChord}
-      />
-      <input
-        value="4"
-        type="radio"
-        name="chord"
-        onChange={handleChord}
-      />
-      <input
-        value="5"
-        type="radio"
-        name="chord"
-        onChange={handleChord}
-      />
+      {[1,2,3,4,5].map((num, index) => (
+        <input
+          value={num}
+          key={index}
+          type="radio"
+          name="chord"
+          onChange={handleChord}
+        />  
+      ))}
     </>
   );
 }
